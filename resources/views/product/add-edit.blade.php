@@ -236,6 +236,8 @@
 
                             </div>
 
+                            @if(isset($data['product'])
+
                             <div class="row">
                                 <div class="col-12 col-md-4">
                                     <label for="">Features</label>
@@ -261,6 +263,8 @@
                                 @endforeach
 
                             </div>
+
+                            @endif
 
                             <div class="row">
                                 <div class="col-12 col-md-4">
