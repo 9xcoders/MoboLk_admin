@@ -483,6 +483,8 @@ class ProductController extends Controller
             'product_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], [], $customAttributes);
 
+//        dd($validator->errors());
+
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
