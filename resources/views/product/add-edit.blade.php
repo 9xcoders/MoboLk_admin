@@ -10,17 +10,29 @@
         <div class="col-lg-12 widget-content py-2">
             <div class="bd-example bd-example-tabs">
                 <ul class="nav nav-tabs" id="myTab1" role="tablist">
+
+                    @if(!isset($isVersion))
                     <li class="nav-item">
                         <a class="nav-link active" id="info" data-toggle="tab" href="#product-info" role="tab"
                            aria-controls="Product Info" aria-selected="false">Product Info</a>
                     </li>
-
                     @if(isset($data['product']))
-
                     <li class="nav-item">
                         <a class="nav-link" id="version" data-toggle="tab" href="#product-version" role="tab"
                            aria-controls="Version" aria-selected="false">Options</a>
                     </li>
+                    @endif
+                    @else
+                    <li class="nav-item">
+                        <a class="nav-link" id="info" data-toggle="tab" href="#product-info" role="tab"
+                           aria-controls="Product Info" aria-selected="false">Product Info</a>
+                    </li>
+                    @if(isset($data['product']))
+                    <li class="nav-item">
+                        <a class="nav-link active" id="version" data-toggle="tab" href="#product-version" role="tab"
+                           aria-controls="Version" aria-selected="false">Options</a>
+                    </li>
+                    @endif
                     @endif
 
                 </ul>
@@ -36,20 +48,28 @@
                             @if(isset($data['product']))
                             @method('PUT')
                             @endif
+
                             <input type="hidden" class="form-control" id="id" name="id"
                                    value="{{isset($data['product']) ? $data['product']->id : null}}">
                             <div class="row">
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
-                                        <label for="name">Product Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder=""
+                                        <label for="name">Product Name *</label>
+                                        <input required type="text" class="form-control" id="name" name="name"
+                                               placeholder=""
                                                value="{{isset($data['product']) ? $data['product']->name : null}}">
+                                        @error('name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                        @error('slug')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-3 d-inline d-inline-block">
                                     <div class="form-group">
-                                        <label for="brand_id">Category</label>
-                                        <select class="form-control" id="category_id" name="category_id">
+                                        <label for="brand_id">Category *</label>
+                                        <select required class="form-control" id="category_id" name="category_id">
                                             <option value="">--Select a category--</option>
                                             @foreach($data['categories'] as $category)
 
@@ -66,6 +86,9 @@
 
                                             @endforeach
                                         </select>
+                                        @error('category_id')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
 
@@ -104,11 +127,14 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <label for="short_desc">Short Description</label>
-                                        <textarea class="form-control" id="short_desc" name="short_desc"
+                                        <label for="short_desc">Short Description *</label>
+                                        <textarea required class="form-control" id="short_desc" name="short_desc"
                                                   rows="2">
                         {{isset($data['product']) ? $data['product']->short_desc : null}}
                     </textarea>
+                                        @error('short_desc')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -127,9 +153,13 @@
                             <div class="row">
                                 <div class="col-12 col-md-3">
                                     <div class="form-group">
-                                        <label for="name">Product Price</label>
-                                        <input type="number" class="form-control" id="price" name="price" placeholder=""
+                                        <label for="name">Product Price *</label>
+                                        <input required type="number" class="form-control" id="price" name="price"
+                                               placeholder=""
                                                value="{{isset($data['product']) ? $data['product']->price : null}}">
+                                        @error('price')
+                                        <div class="text-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -178,146 +208,149 @@
                                     </div>
                                 </div>
 
-
                             </div>
 
                             <div class="row">
-                                <div class="col-6">
-                                    <div class="file-upload">
-                                        <div class="image-upload-wrap">
-                                            <input class="file-upload-input" name="default_image" type='file'
-                                                   onchange="readURL(this);"
-                                                   accept="image/*"/>
-                                            <div class="drag-text">
-                                                <h3>Drag and drop a file or select add Image</h3>
-                                            </div>
+                                <div class="col-12 col-md-4 mb-4">
+
+                                    <div class="input-group control-group increment">
+                                        <input type="file" name="product_images[]" class="form-control">
+                                        <div class="input-group-btn">
+                                            <button id="btn-add-image" class="btn btn-success" type="button"><i
+                                                    class="glyphicon glyphicon-plus"></i>Add
+                                            </button>
                                         </div>
-                                        <div class="file-upload-content">
-                                            <img class="file-upload-image" src="#" alt="your image"/>
-                                            <div class="image-title-wrap">
-                                                <button type="button" onclick="removeUpload()" class="remove-image">
-                                                    Remove <span
-                                                        class="image-title">Uploaded Image</span></button>
+                                    </div>
+                                    <div class="clone" style="display:none">
+                                        <div class="control-group input-group" style="margin-top:10px">
+                                            <input type="file" name="product_images[]" class="form-control">
+                                            <div class="input-group-btn">
+                                                <button id="btn-remove-image" class="btn btn-danger" type="button"><i
+                                                        class="glyphicon glyphicon-remove"></i> Remove
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
+
+
+                                    @error('product_images')
+                                    <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
+
                             <button class="btn btn-primary" type="submit">Save</button>
                         </form>
+
+
+                        @if(isset($data['product']))
+                        <div class="row mt-4">
+
+                            <div class="col-12">
+                                <h4 class="text-dark">Available Images</h4>
+                            </div>
+
+                            <div class="col-12">
+
+                                @if(count($data['product']->productImages)>0)
+
+                                    <table class="table table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($data['product']->productImages as $image)
+
+                                    <tr>
+                                        <td>
+                                            <img class="image" src="{{ $image->image_url }}" height="100px"
+                                                 width="150px"
+                                                 alt="{{ $data['product']->slug }}">
+                                        </td>
+                                        <td>{{ $image->image_url }}</td>
+                                        <td class="d-inline-flex">
+                                            <form action="{{ route('product.deleteImage', $image->id)}}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger mb-2">
+                                                    <i class="fa fa-remove"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                    @endforeach
+                                    </tbody>
+                                </table>
+
+                                @else
+
+                                    <h6 class="text-danger">No product image available</h6>
+
+                                @endif
+                            </div>
+
+                        </div>
+
+                        @endif
 
                     </div>
                     <div class="tab-pane fade" id="product-version" role="tabpanel"
                          aria-labelledby="product-version-tab">
 
-                        <form id="needs-validation" class="pt-2" enctype="multipart/form-data"
-                              novalidate method="post"
-                              action="{{isset($data['version']) ? route('version.update', $data['version']->id) : route('version.store')}}"
-                              autocomplete="off">
-                            @csrf
-                            @if(isset($data['version']))
-                            @method('PUT')
-                            @endif
-                            <input type="hidden" class="form-control" id="id" name="id"
-                                   value="{{isset($data['version']) ? $data['version']->id : null}}">
 
+                        @if(isset($data['product']))
 
-                            <input type="hidden" class="form-control" id="product_id" name="product_id"
-                                   value="{{isset($data['product']) ? $data['product']->id : null}}">
-                            <div class="row">
-                                <div class="col-12 col-md-6">
-                                    <div class="form-group">
-                                        <label for="name">Version Name</label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder=""
-                                               value="{{isset($data['product']) ? $data['product']->name : null}}">
-                                    </div>
-                                </div>
+                        <a href="{{ route('version.create', ['id' => $data['product']->id]) }}" type="button"
+                           class="btn btn-primary mb-4 mt-4">
+                            <i class="fa fa-plus-circle"></i>&nbsp;Add Option
+                        </a>
 
-                            </div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($data['product']->productVersions as $productVersion)
 
-                            @if(isset($data['product']))
+                            <tr>
+                                <th scope="row">{{ $productVersion->unique_id }}</th>
+                                <td>{{ $productVersion->name }}</td>
+                                <td>{{ $productVersion->price }}</td>
+                                <td>{{ $productVersion->in_stock ? 'Yes' : 'No' }}</td>
+                                <td class="d-inline-flex">
+                                    <a type="button" class="btn btn-info mb-2"
+                                       href="{{ route('version.edit', [ 'versionId' => $productVersion->id, 'id' => $data['product']->id]) }}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
 
-                            <div class="row">
-                                <div class="col-12 col-md-4">
-                                    <label for="">Features</label>
-                                </div>
-                            </div>
+                                    <form
+                                        action="{{ route('version.delete', [ 'versionId' => $productVersion->id, 'id' => $data['product']->id])}}"
+                                        method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger mb-2">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
 
-                            <div class="row">
-                                @foreach($data['featureCategories'] as $featureCategory)
-
-                                <div class="col-12 col-md-4">
-                                    <div class="form-group">
-                                        <label for="name">{{$featureCategory->name}}</label>
-                                        <select class="form-control" id="feature_category_{{$featureCategory->id}}"
-                                                name="features[]">
-                                            @foreach($featureCategory->features as $feature)
-                                            <option value="{{$feature->id}}">{{$feature->name}}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                @endforeach
-
-                            </div>
-
-                            @endif
-
-                            <div class="row">
-                                <div class="col-12 col-md-4">
-                                    <div class="form-group">
-                                        <label for="name">Version Price</label>
-                                        <input type="number" class="form-control" id="price" name="price" placeholder=""
-                                               value="{{isset($data['product']) ? $data['product']->price : null}}">
-                                    </div>
-                                </div>
-
-                                <div class="col-12 col-md-4">
-                                    <div class="form-group">
-                                        <label for="name">Discount Price</label>
-                                        <input type="number" class="form-control" id="off_price" name="off_price"
-                                               placeholder=""
-                                               value="{{isset($data['product']) ? $data['product']->off_price : null}}">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-
-                                @for($i=0; $i<3; $i++)
-                                <div class="col-4">
-                                    <div class="file-upload">
-                                        <div class="image-upload-wrap">
-                                            <input class="file-upload-input" name="version_images[]" type='file'
-                                                   onchange="readURL(this);"
-                                                   accept="image/*"/>
-                                            <div class="drag-text">
-                                                <h3>Drag and drop a file or select add Image</h3>
-                                            </div>
-                                        </div>
-                                        <div class="file-upload-content">
-                                            <img class="file-upload-image" src="#" alt="your image"/>
-                                            <div class="image-title-wrap">
-                                                <button type="button" onclick="removeUpload()" class="remove-image">
-                                                    Remove <span
-                                                        class="image-title">Uploaded Image</span></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endfor
-
-
-                            </div>
-
-                            <button class="btn btn-primary" type="submit">Save</button>
-
-                        </form>
-
+                            @endforeach
+                            </tbody>
+                        </table>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
     {
         DB::table('products')->insert([
             [
-                'unique_id' => 'XXXXYYYYZZZZ',
+                'unique_id' => 'PRD-00000001',
                 'name' => 'Samsung Galaxy A50',
                 'slug' => 'samsung-galaxy-a50',
                 'short_desc' => '',
@@ -23,11 +23,10 @@ class ProductSeeder extends Seeder
                 'in_stock' => true,
                 'brand_id' => 1,
                 'category_id' => 1,
-                'default_image' => '/img/products/product01.png',
                 'keywords' => 'samsung, mobile, phone, samsung, galaxy, galaxy A5, A50'
             ],
             [
-                'unique_id' => 'XXXXYYYZZZZZ',
+                'unique_id' => 'PRD-00000002',
                 'name' => 'Huawei P9',
                 'slug' => 'huawei-p9',
                 'short_desc' => '',
@@ -36,11 +35,10 @@ class ProductSeeder extends Seeder
                 'in_stock' => true,
                 'brand_id' => 2,
                 'category_id' => 1,
-                'default_image' => '/img/products/product01.png',
                 'keywords' => 'huawei, mobile, phone, huawei P9, P9'
             ],
             [
-                'unique_id' => 'XXXYYYYZZZZZ',
+                'unique_id' => 'PRD-00000003',
                 'name' => 'Apple IPhone 7',
                 'slug' => 'apple-iphone-7',
                 'short_desc' => '',
@@ -49,7 +47,6 @@ class ProductSeeder extends Seeder
                 'in_stock' => true,
                 'brand_id' => 3,
                 'category_id' => 1,
-                'default_image' => '/img/products/product01.png',
                 'keywords' => 'apple,iphone, mobile, phone, apple iphone 7, iphone 7'
             ],
         ]);

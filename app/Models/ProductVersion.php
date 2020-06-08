@@ -17,8 +17,13 @@ class ProductVersion extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function versionFeatures()
+    public function productFeatures()
     {
-        return $this->hasMany(ProductFeature::class)->where('is_version', true);
+        return $this->hasMany(ProductFeature::class, 'product_id')->where('is_version', true);
+    }
+
+    public function productImages()
+    {
+        return $this->hasMany(ProductImages::class, 'product_id')->where('is_version', true);
     }
 }

@@ -10,10 +10,13 @@ class Product extends Model
     //
     protected $table = 'products';
     protected $primaryKey = 'id';
-    use SoftDeletes;
 
     protected $fillable = ['unique_id', 'name', 'slug', 'short_desc',
         'long_desc', 'price', 'off_price', 'in_stock', 'brand_id', 'category_id', 'keywords'];
+
+    protected $rules = [
+        'slug' => 'sometimes|required|unique:products',
+    ];
 
     public function category()
     {
@@ -33,5 +36,10 @@ class Product extends Model
     public function productFeatures()
     {
         return $this->hasMany(ProductFeature::class)->where('is_version', false);;
+    }
+
+    public function productImages()
+    {
+        return $this->hasMany(ProductImages::class)->where('is_version', false);
     }
 }

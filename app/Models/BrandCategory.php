@@ -9,7 +9,6 @@ class BrandCategory extends Model
 {
     protected $table = 'brand_categories';
     protected $primaryKey = 'id';
-    use SoftDeletes;
 
     protected $fillable = ['brand_id', 'category_id'];
 

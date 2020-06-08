@@ -1,4 +1,14 @@
 $(document).ready(function () {
+
+    $("#btn-add-image").click(function(){
+        var html = $(".clone").html();
+        $(".increment").after(html);
+    });
+
+    $("body").on("click","#btn-remove-image",function(){
+        $(this).parents(".control-group").remove();
+    });
+
     let categoryId = $('#category_id').children("option:selected").val();
     if (categoryId) {
         $('#brand_id').attr('disabled', false);

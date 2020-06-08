@@ -9,7 +9,6 @@ class FeatureCategory extends Model
 {
     protected $table = 'feature_categories';
     protected $primaryKey = 'id';
-    use SoftDeletes;
 
     public function features()
     {

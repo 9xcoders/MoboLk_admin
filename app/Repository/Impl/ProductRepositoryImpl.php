@@ -24,14 +24,19 @@ class ProductRepositoryImpl extends BaseRepositoryImpl implements ProductReposit
         parent::__construct($model);
     }
 
+    public function productsWithCategories()
+    {
+        return Product::with('category', 'productImages')->orderBy('created_at', 'desc')->get();
+    }
+
     public function productsWithCategoriesOffset($offset)
     {
-        return Product::with('category')->orderBy('created_at', 'desc')->paginate($offset);
+        return Product::with('category', 'productImages')->orderBy('created_at', 'desc')->paginate($offset);
     }
 
     public function productsWithCategoriesAndFiltersOffset($offset, $filters)
     {
-        $products = Product::with('category', 'brand');
+        $products = Product::with('category', 'brand', 'productImages');
 
         if (array_key_exists("category", $filters)) {
             $category = $filters["category"];
@@ -63,13 +68,13 @@ class ProductRepositoryImpl extends BaseRepositoryImpl implements ProductReposit
 
     public function productWithEverythingBySlug($slug)
     {
-        return Product::with('category', 'brand')
+        return Product::with('category', 'brand', 'productImages')
             ->where('slug', $slug)->first();
     }
 
     public function relatedProductsByProduct($product)
     {
-        return Product::with('productCategory.category')
+        return Product::with('productCategory.category', 'productImages')
             ->where('id', '!=', $product->id)
             ->whereHas('category', function ($query) use ($product) {
                 $query->where('id', $product->category_id);
@@ -84,7 +89,7 @@ class ProductRepositoryImpl extends BaseRepositoryImpl implements ProductReposit
 
     public function productWithEverythingById($productId)
     {
-        return Product::with('category', 'brand')
+        return Product::with('category', 'brand', 'productVersions', 'productImages')
             ->where('id', $productId)->first();
     }
 

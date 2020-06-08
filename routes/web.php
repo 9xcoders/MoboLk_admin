@@ -36,12 +36,23 @@ Route::group(['prefix' => 'product'], function () {
     Route::get('/', 'ProductController@index')->name('product.index');
     Route::get('create', 'ProductController@create')->name('product.create');
     Route::post('store', 'ProductController@store')->name('product.store');
-    Route::get('edit/{id}', 'ProductController@edit')->name('product.edit');
     Route::put('update/{id}', 'ProductController@update')->name('product.update');
     Route::delete('delete/{id}', 'ProductController@delete')->name('product.delete');
+    Route::delete('delete-img/{id}', 'ProductController@deleteProductImage')->name('product.deleteImage');
 
-    Route::group(['prefix' => 'version'], function () {
-        Route::post('store', 'ProductController@versionStore')->name('version.store');
+    Route::group(['prefix' => 'edit'], function () {
+        Route::group(['prefix' => '{id}'], function () {
+            Route::get('/', 'ProductController@edit')->name('product.edit');
+            Route::group(['prefix' => 'version'], function () {
+                Route::get('create', 'ProductController@versionCreate')->name('version.create');
+                Route::post('store', 'ProductController@versionStore')->name('version.store');
+                Route::get('edit/{versionId}', 'ProductController@versionEdit')->name('version.edit');
+                Route::put('update/{versionId}', 'ProductController@versionUpdate')->name('version.update');
+                Route::delete('delete/{versionId}', 'ProductController@versionDelete')->name('version.delete');
+            });
+        });
+
+
     });
 });
 

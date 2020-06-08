@@ -19,7 +19,6 @@ class CreateBrandsTable extends Migration
             $table->string('slug')->unique();
             $table->longText('image');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

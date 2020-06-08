@@ -19,7 +19,6 @@ class CreateProductFeaturesTable extends Migration
             $table->unsignedInteger('feature_id');
             $table->boolean('is_version');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

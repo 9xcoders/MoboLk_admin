@@ -15,9 +15,11 @@ use App\Repository\Impl\CategoryRepositoryImpl;
 use App\Repository\Impl\FeatureCategoryRepositoryImpl;
 use App\Repository\Impl\FeatureRepositoryImpl;
 use App\Repository\Impl\ProductFeatureRepositoryImpl;
+use App\Repository\Impl\ProductImageRepositoryImpl;
 use App\Repository\Impl\ProductRepositoryImpl;
 use App\Repository\Impl\ProductVersionRepositoryImpl;
 use App\Repository\ProductFeatureRepository;
+use App\Repository\ProductImageRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ProductVersionRepository;
 use Illuminate\Support\ServiceProvider;
@@ -40,6 +42,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProductVersionRepository::class, ProductVersionRepositoryImpl::class);
         $this->app->bind(FeatureRepository::class, FeatureRepositoryImpl::class);
         $this->app->bind(ProductFeatureRepository::class, ProductFeatureRepositoryImpl::class);
+        $this->app->bind(ProductImageRepository::class, ProductImageRepositoryImpl::class);
     }
 
     /**

@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Repository\BrandRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\FeatureCategoryRepository;
 use App\Repository\FeatureRepository;
 use App\Repository\ProductFeatureRepository;
+use App\Repository\ProductImageRepository;
 use App\Repository\ProductRepository;
 use App\Repository\ProductVersionRepository;
+use Carbon\Carbon;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Shakee93\FonoApi\FonoApi;
 use Illuminate\Support\Str;
 use Image;
@@ -19,6 +24,7 @@ use Image;
 class ProductController extends Controller
 {
     private $productRepository;
+    private $productImageRepository;
     private $categoryRepository;
     private $featureRepository;
     private $brandRepository;
@@ -32,6 +38,7 @@ class ProductController extends Controller
                                 BrandRepository $brandRepository,
                                 FeatureRepository $featureRepository,
                                 ProductRepository $productRepository,
+                                ProductImageRepository $productImageRepository,
                                 ProductVersionRepository $productVersionRepository,
                                 ProductFeatureRepository $productFeatureRepository,
                                 FeatureCategoryRepository $featureCategoryRepository)
@@ -39,6 +46,7 @@ class ProductController extends Controller
         $this->categoryRepository = $categoryRepository;
         $this->featureRepository = $featureRepository;
         $this->productRepository = $productRepository;
+        $this->productImageRepository = $productImageRepository;
         $this->productVersionRepository = $productVersionRepository;
         $this->productFeatureRepository = $productFeatureRepository;
         $this->brandRepository = $brandRepository;
@@ -49,7 +57,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
 
-        $products = $this->productRepository->productsWithCategoriesOffset(20);
+        $products = $this->productRepository->productsWithCategories();
         $data = [
             'title' => 'Products',
             'products' => $products
@@ -72,22 +80,51 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $imageUrl = null;
+
+        $params = $request->all();
         $productSlug = Str::slug($request->name, '-');
 
-        if ($request->file('default_image')) {
-            $image = $request->file('default_image');
-            $filename = $productSlug . '.' . $image->getClientOriginalExtension();
+        $params['slug'] = $productSlug;
 
-            $directory = 'img/products/';
-            $path = public_path($directory);
-            if (!File::exists($path)) File::makeDirectory($path, 0755);
 
-            $imageSave = Image::make($image);
-            $imageSave->fit(600, 600);
-            $imageSave->save($path . '/' . $filename);
+        $customAttributes = [
+            'name' => 'Product name',
+            'slug' => 'Product name',
+            'category_id' => 'Category',
+            'price' => 'Price',
+            'short_desc' => 'Short description',
+        ];
 
-            $imageUrl = url($directory . $filename);
+        $validator = Validator::make($params, [
+            'name' => 'required|max:255',
+            'slug' => 'required|unique:products,slug',
+            'category_id' => 'required',
+            'price' => 'required',
+            'short_desc' => 'required',
+            'product_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ], [], $customAttributes);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        $imageUrls = [];
+
+        if ($request->file('product_images')) {
+
+            foreach ($request->file('product_images') as $image) {
+                $filename = $productSlug . '-' . Carbon::now()->timestamp . rand(1, 1000) . '.' . $image->getClientOriginalExtension();
+                $directory = 'img/products/';
+                $path = public_path($directory);
+                if (!File::exists($path)) File::makeDirectory($path, 0755);
+
+                $imageSave = Image::make($image);
+                $imageSave->fit(600, 600);
+                $imageSave->save($path . '/' . $filename);
+
+                $imageUrls[] = url($directory . $filename);
+            }
         }
         $id = IdGenerator::generate(['table' => 'products', 'field' => 'unique_id', 'length' => 12, 'prefix' => 'PRD-']);
 
@@ -95,7 +132,6 @@ class ProductController extends Controller
             'name' => $request->name,
             'slug' => $productSlug,
             'unique_id' => $id,
-            'default_image' => $imageUrl,
             'short_desc' => $request->short_desc,
             'long_desc' => $request->long_desc,
             'price' => $request->price,
@@ -107,6 +143,18 @@ class ProductController extends Controller
         ];
         $inserted = $this->productRepository->create($product);
         if ($inserted) {
+
+
+            $imageArray = [];
+            foreach ($imageUrls as $imageUrl) {
+                $imageArray[] = [
+                    'product_id' => $inserted->id,
+                    'image_url' => $imageUrl,
+                    'is_version' => false
+                ];
+            }
+            $this->productImageRepository->insert($imageArray);
+
             return redirect()->route('product.index');
         }
         return null;
@@ -135,31 +183,58 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-//        dd($request->all());
-
         $product = $this->productRepository->find($id);
+
+        $imageUrl = null;
+        $params = $request->all();
+        $productSlug = Str::slug($request->name, '-');
+
+        $params['slug'] = $productSlug;
+
+        $customAttributes = [
+            'name' => 'Product name',
+            'slug' => 'Product name',
+            'category_id' => 'Category',
+            'price' => 'Price',
+            'short_desc' => 'Short description',
+        ];
+
+        $validator = Validator::make($params, [
+            'name' => 'required|max:255',
+            'slug' => ['required', Rule::unique('products', 'slug')->ignore($id, 'id')],
+            'category_id' => 'required',
+            'price' => 'required',
+            'short_desc' => 'required',
+            'product_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ], [], $customAttributes);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         if (!$product) {
             dd("Not found");
         }
 
-        $imageUrl = null;
-        $productSlug = Str::slug($request->name, '-');
 
-        if ($request->file('default_image')) {
-            $image = $request->file('default_image');
-            $filename = $productSlug . '.' . $image->getClientOriginalExtension();
+        $imageUrls = [];
 
-            $directory = 'img/products/';
-            $path = public_path($directory);
-            if (!File::exists($path)) File::makeDirectory($path, 0755);
+        if ($request->file('product_images')) {
 
-            $imageSave = Image::make($image);
-            $imageSave->fit(250, 150);
-            $imageSave->save($path . '/' . $filename);
+            foreach ($request->file('product_images') as $image) {
+                $filename = $productSlug . '-' . Carbon::now()->timestamp . rand(1, 1000) . '.' . $image->getClientOriginalExtension();
+                $directory = 'img/products/';
+                $path = public_path($directory);
+                if (!File::exists($path)) File::makeDirectory($path, 0755);
 
-            $imageUrl = url($directory . $filename);
-            $product->default_image = $imageUrl;
+                $imageSave = Image::make($image);
+                $imageSave->fit(600, 600);
+                $imageSave->save($path . '/' . $filename);
+
+                $imageUrls[] = url($directory . $filename);
+            }
         }
 
         $product->name = $request->name;
@@ -173,6 +248,16 @@ class ProductController extends Controller
         $product->off_price = $request->off_price;
         $product->keywords = $request->keywords;
         $product->save();
+
+        $imageArray = [];
+        foreach ($imageUrls as $imageUrl) {
+            $imageArray[] = [
+                'product_id' => $product->id,
+                'image_url' => $imageUrl,
+                'is_version' => false
+            ];
+        }
+        $this->productImageRepository->insert($imageArray);
 
         return redirect()->route('product.index');
     }
@@ -188,6 +273,17 @@ class ProductController extends Controller
 
     }
 
+    public function deleteProductImage(Request $request, $id)
+    {
+        $productImage = $this->productImageRepository->find($id);
+        if (!$productImage) {
+            dd("Not found");
+        }
+        $this->productImageRepository->delete($productImage->id);
+        return redirect()->route('product.index');
+
+    }
+
 
     public function versionIndex(Request $request)
     {
@@ -196,25 +292,75 @@ class ProductController extends Controller
 
     public function versionCreate(Request $request)
     {
-        dd($request->all());
+        $data = [
+            'title' => 'Add Version',
+            'product' => $product = $this->productRepository->find($request->id),
+            'featureCategories' => $this->featureCategoryRepository->featureCategoriesWithFeatures()
+        ];
+
+        return view('version.add-edit', compact('data'));
     }
 
-    public function versionStore(Request $request)
+    public function versionStore(Request $request, $id)
     {
+        $params = $request->all();
         $productSlug = Str::slug($request->name, '-');
 
-        $id = IdGenerator::generate(['table' => 'product_versions', 'field' => 'unique_id', 'length' => 12, 'prefix' => 'VRN-']);
-
-        $productSlug .= '_' . $productSlug;
+        $productSlug .= '_';
         foreach ($request->features as $feature) {
             $productSlug .= $this->featureRepository->find($feature)->slug . '-';
         }
 
         $productSlug = rtrim($productSlug, '-');
 
+        $params['slug'] = $productSlug;
+
+
+        $customAttributes = [
+            'name' => 'Name',
+            'slug' => 'Name',
+            'price' => 'Price'
+        ];
+
+        $validator = Validator::make($params, [
+            'name' => 'required|max:255',
+            'slug' => 'required|unique:product_versions,slug',
+            'price' => 'required',
+            'product_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ], [], $customAttributes);
+
+
+        $imageUrls = [];
+
+        if ($request->file('product_images')) {
+
+            foreach ($request->file('product_images') as $image) {
+                $filename = $productSlug . '-' . Carbon::now()->timestamp . rand(1, 1000) . '.' . $image->getClientOriginalExtension();
+                $directory = 'img/products/';
+                $path = public_path($directory);
+                if (!File::exists($path)) File::makeDirectory($path, 0755);
+
+                $imageSave = Image::make($image);
+                $imageSave->fit(600, 600);
+                $imageSave->save($path . '/' . $filename);
+
+                $imageUrls[] = url($directory . $filename);
+            }
+        }
+
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $versionId = IdGenerator::generate(['table' => 'product_versions', 'field' => 'unique_id', 'length' => 12, 'prefix' => 'VRN-']);
+
+
         $version = [
             'name' => $request->name,
-            'unique_id' => $id,
+            'unique_id' => $versionId,
             'product_id' => $request->product_id,
             'slug' => $productSlug,
             'price' => $request->price,
@@ -223,7 +369,6 @@ class ProductController extends Controller
             'features' => json_encode($request->features)
         ];
 
-//        dd($version);
         $inserted = $this->productVersionRepository->create($version);
 
         if ($inserted) {
@@ -236,8 +381,160 @@ class ProductController extends Controller
                 ];
             }
             $this->productFeatureRepository->insert($productFeatures);
-            dd($inserted);
+
+            $imageArray = [];
+            foreach ($imageUrls as $imageUrl) {
+                $imageArray[] = [
+                    'product_id' => $inserted->id,
+                    'image_url' => $imageUrl,
+                    'is_version' => true
+                ];
+            }
+            $this->productImageRepository->insert($imageArray);
+
+
+            return redirect()->route('product.edit', ['id' => $id])->with('isVersion', true);
         }
 
+        return null;
     }
+
+    public function versionEdit(Request $request, $id, $versionId)
+    {
+        $version = $this->productVersionRepository->productVersionWithEverythingById($versionId);
+
+        $featureCats = $this->featureCategoryRepository->featureCategoriesWithFeatures();
+
+        foreach ($featureCats as $featureCat) {
+
+            foreach ($featureCat->features as $feature) {
+                $feature->selected = false;
+                foreach ($version->productFeatures as $productFeature) {
+                    if ($feature->id == $productFeature->feature->id) {
+                        $feature->selected = true;
+                    }
+                }
+            }
+        }
+
+
+        if (!$version) {
+            dd("Not found");
+        }
+
+        $data = [
+            'title' => 'Add Version',
+            'product' => $product = $this->productRepository->find($request->id),
+            'featureCategories' => $featureCats,
+            'version' => $version
+        ];
+
+        return view('version.add-edit', compact('data'));
+    }
+
+    public function versionUpdate(Request $request, $id, $versionId)
+    {
+        $version = $this->productVersionRepository->find($versionId);
+
+        if (!$version) {
+            dd("Not found");
+        }
+
+
+        $params = $request->all();
+
+        $productSlug = Str::slug($request->name, '-');
+        $productSlug .= '_';
+        foreach ($request->features as $feature) {
+            $productSlug .= $this->featureRepository->find($feature)->slug . '-';
+        }
+
+        $productSlug = rtrim($productSlug, '-');
+        $params['slug'] = $productSlug;
+
+        $imageUrls = [];
+
+        if ($request->file('product_images')) {
+
+            foreach ($request->file('product_images') as $image) {
+                $filename = $productSlug . '-' . Carbon::now()->timestamp . rand(1, 1000) . '.' . $image->getClientOriginalExtension();
+                $directory = 'img/products/';
+                $path = public_path($directory);
+                if (!File::exists($path)) File::makeDirectory($path, 0755);
+
+                $imageSave = Image::make($image);
+                $imageSave->fit(600, 600);
+                $imageSave->save($path . '/' . $filename);
+
+                $imageUrls[] = url($directory . $filename);
+            }
+        }
+
+        $customAttributes = [
+            'name' => 'Name',
+            'slug' => 'Name',
+            'price' => 'Price',
+        ];
+
+        $validator = Validator::make($params, [
+            'name' => 'required|max:255',
+            'slug' => ['required', Rule::unique('product_versions', 'slug')->ignore($id, 'id')],
+            'price' => 'required',
+            'product_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ], [], $customAttributes);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $version->name = $request->name;
+        $version->slug = $productSlug;
+        $version->in_stock = $request->in_stock ? true : false;
+        $version->price = $request->price;
+        $version->off_price = $request->off_price;
+        $version->features = json_encode($request->features);
+
+
+        $version->save();
+
+
+        $version->productFeatures()->delete();
+
+        $productFeatures = [];
+        foreach ($request->features as $feature) {
+            $productFeatures[] = [
+                'product_id' => $version->id,
+                'is_version' => true,
+                'feature_id' => $feature
+            ];
+        }
+        $this->productFeatureRepository->insert($productFeatures);
+
+        $imageArray = [];
+        foreach ($imageUrls as $imageUrl) {
+            $imageArray[] = [
+                'product_id' => $version->id,
+                'image_url' => $imageUrl,
+                'is_version' => true
+            ];
+        }
+        $this->productImageRepository->insert($imageArray);
+
+        return redirect()->route('product.edit', ['id' => $id])->with('isVersion', true);
+    }
+
+    public function versionDelete(Request $request, $id, $versionId)
+    {
+        $version = $this->productVersionRepository->find($versionId);
+        if (!$version) {
+            dd("Not found");
+        }
+        $this->productVersionRepository->delete($version->id);
+        return redirect()->route('product.edit', ['id' => $id])->with('isVersion', true);
+
+    }
+
+
 }

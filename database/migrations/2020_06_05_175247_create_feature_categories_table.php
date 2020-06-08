@@ -19,7 +19,6 @@ class CreateFeatureCategoriesTable extends Migration
             $table->string('slug')->unique();
             $table->boolean('add_multi')->default(false);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

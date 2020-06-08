@@ -25,13 +25,8 @@ class CreateProductsTable extends Migration
             $table->boolean('in_stock')->default(false);
             $table->integer('category_id')->nullable();
             $table->integer('brand_id')->nullable();
-            $table->string('default_image')->nullable();
-            $table->string('thumb_image')->nullable();
-            $table->string('medium_image')->nullable();
-            $table->string('large_image')->nullable();
             $table->text('keywords')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

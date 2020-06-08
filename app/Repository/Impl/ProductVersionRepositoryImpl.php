@@ -20,4 +20,20 @@ class ProductVersionRepositoryImpl extends BaseRepositoryImpl implements Product
     {
         parent::__construct($model);
     }
+
+    public function productVersionWithEverythingBySlug($slug)
+    {
+        return ProductVersion::with('productFeatures.feature.featureCategory', 'productImages')->where('slug', $slug)->first();
+    }
+
+    public function productVersionWithEverythingById($version)
+    {
+        return ProductVersion::with('productFeatures.feature.featureCategory', 'productImages')->where('id', $version)->first();
+
+    }
+
+    public function delete($id)
+    {
+        return ProductVersion::destroy($id);
+    }
 }

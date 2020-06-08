@@ -19,7 +19,6 @@ class CreateBrandCategoriesTable extends Migration
             $table->unsignedInteger('category_id');
             $table->boolean('show_home')->default(false);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
