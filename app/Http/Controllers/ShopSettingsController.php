@@ -15,6 +15,7 @@ class ShopSettingsController extends Controller
 
     public function __construct(ShopSettingsRepository $shopSettingsRepository)
     {
+        $this->middleware('auth');
         $this->shopSettingsRepository = $shopSettingsRepository;
     }
 

@@ -43,6 +43,7 @@ class ProductController extends Controller
                                 ProductFeatureRepository $productFeatureRepository,
                                 FeatureCategoryRepository $featureCategoryRepository)
     {
+        $this->middleware('auth');
         $this->categoryRepository = $categoryRepository;
         $this->featureRepository = $featureRepository;
         $this->productRepository = $productRepository;

@@ -18,6 +18,7 @@ class FeatureController extends Controller
     public function __construct(FeatureCategoryRepository $featureCategoryRepository,
                                 FeatureRepository $featureRepository)
     {
+        $this->middleware('auth');
         $this->featureRepository = $featureRepository;
         $this->featureCategoryRepository = $featureCategoryRepository;
     }

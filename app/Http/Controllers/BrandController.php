@@ -22,6 +22,7 @@ class BrandController extends Controller
                                 BrandRepository $brandRepository,
                                 BrandCategoryRepository $brandCategoryRepository)
     {
+        $this->middleware('auth');
         $this->categoryRepository = $categoryRepository;
         $this->brandRepository = $brandRepository;
         $this->brandCategoryRepository = $brandCategoryRepository;
