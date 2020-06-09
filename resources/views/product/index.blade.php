@@ -9,6 +9,7 @@
         <i class="fa fa-plus-circle"></i>&nbsp;Add Product
     </a>
 
+    @if(count($data['products']) > 0)
     <table class="table table-responsive">
         <thead>
         <tr>
@@ -54,6 +55,10 @@
         @endforeach
         </tbody>
     </table>
+
+    @else
+    <h5 class="text-danger">No products available</h5>
+    @endif
 </div>
 
 

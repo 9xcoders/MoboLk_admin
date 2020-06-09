@@ -8,6 +8,19 @@
 
     <div class="row">
         <div class="col-lg-12 widget-content py-2">
+
+            <div class="row">
+                <div class="col-12">
+                    @if(isset($data['product']))
+
+                    @if(count($data['product']->productVersions) > 0)
+                    <h5 class="text-info font-weight-bold">This product has
+                        {{count($data['product']->productVersions)}} options</h5>
+                    @endif
+                    @endif
+                </div>
+            </div>
+
             <div class="bd-example bd-example-tabs">
                 <ul class="nav nav-tabs" id="myTab1" role="tablist">
 
@@ -255,7 +268,7 @@
 
                                 @if(count($data['product']->productImages)>0)
 
-                                    <table class="table table-responsive">
+                                <table class="table table-responsive">
                                     <thead>
                                     <tr>
                                         <th>Image</th>
@@ -290,7 +303,7 @@
 
                                 @else
 
-                                    <h6 class="text-danger">No product image available</h6>
+                                <h6 class="text-danger">No product image available</h6>
 
                                 @endif
                             </div>
@@ -310,6 +323,8 @@
                            class="btn btn-primary mb-4 mt-4">
                             <i class="fa fa-plus-circle"></i>&nbsp;Add Option
                         </a>
+
+                        @if(count($data['product']->productVersions)> 0)
 
                         <table class="table">
                             <thead>
@@ -350,6 +365,12 @@
                             @endforeach
                             </tbody>
                         </table>
+                        @else
+
+                        <h5 class="text-danger">No options available</h5>
+
+                        @endif
+
                         @endif
                     </div>
                 </div>

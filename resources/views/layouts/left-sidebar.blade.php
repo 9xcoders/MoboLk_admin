@@ -52,6 +52,12 @@
                         <span class="d-none d-lg-inline">Features</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('shop-settings.index')}}">
+                        <i class="fa fa-table" aria-hidden="true"></i>
+                        <span class="d-none d-lg-inline">Shop Settings</span>
+                    </a>
+                </li>
             </ul>
 
             <!-- /Sidebar Menu -->

@@ -66,4 +66,9 @@ Route::group(['prefix' => 'feature'], function () {
 });
 
 
+Route::group(['prefix' => 'shop-settings'], function () {
+    Route::get('/', 'ShopSettingsController@index')->name('shop-settings.index');
+    Route::post('store', 'ShopSettingsController@store')->name('shop-settings.store');
+});
+
 
