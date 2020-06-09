@@ -82,23 +82,22 @@
                                 <img src="assets/custom/1.0.0/images/03.jpg" class="rounded-circle" height="32px">
                             </div>
                             <div class="d-none d-lg-inline-block">
-                                <span class="d-block">John Brown</span>
+                                <span class="d-block">{{ Auth::user()->name }}</span>
                             </div>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-user-circle-o" aria-hidden="true"></i> Profile
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-address-card-o" aria-hidden="true"></i> Contacts
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fa fa-envelope-o" aria-hidden="true"></i> Mailbox
-                            </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="login.html">
-                                <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
+
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+
+                                <i class="fa fa-sign-out" aria-hidden="true"></i> {{ __('Logout') }}
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
                             </a>
                         </div>
 

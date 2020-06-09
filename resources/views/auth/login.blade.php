@@ -1,73 +1,163 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Title -->
+    <title>OpenAdmin - HTML5 client</title>
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+    <!-- Required Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="keywords" content="html5, template, website, responsive, bootstrap">
+    <meta name="author" content="neuethemes">
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+    <!-- Favicon -->
+    <link rel="icon" href="" sizes="32x32"/>
+    <link rel="icon" href="" sizes="192x192"/>
 
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+    <!-- Main CSS with Bootstrap -->
+    <link rel="stylesheet" href="assets/custom/1.0.0/css/style.min.css">
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+    <!-- CSS Vendor -->
+    <link rel="stylesheet" href="assets/vendor/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/vendor/highlight/9.12.0/styles/default.css">
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
+    <script src="assets/vendor/jquery/3.2.1/jquery-3.2.1.min.js"></script>
+</head>
+<body class="login-page dark">
 
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+<div class="container-fluid no-gutters">
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+    <div class="row">
 
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+        <!-- Login Form -->
 
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+        <div class="login-wrapper">
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <!-- Logo -->
+            <div class="logo logo-dark px-4 pt-5 pb-2">
+                <a href="/">
+                    <div class="text-center text-nowrap">
+                        <i class="fa fa-spin fa-play-circle mr-0 rounded-circle" aria-hidden="true"></i>
+                        <h6 class="logo-title text-uppercase mt-3">Mobo.lk</h6>
+                        <p class="text-muted">
+                            <small>ver. 1.0.0</small>
+                        </p>
+                    </div>
+                </a>
             </div>
+            <!-- /Logo -->
+
+            <div class="pt-4">
+
+                <!--                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">-->
+                <!--                    <li class="nav-item text-center border-0 mb-0 w-50">-->
+                <!--                        <a class="nav-link border-0 active" id="login-tab" data-toggle="tab" href="#sign-in" role="tab"-->
+                <!--                           aria-controls="sign-in" aria-selected="true">-->
+                <!--                            <i class="fa fa-pencil-square" aria-hidden="true"></i> Login-->
+                <!--                        </a>-->
+                <!--                    </li>-->
+                <!--                    <li class="nav-item text-center border-0 mb-0 w-50">-->
+                <!--                        <a class="nav-link border-0" id="register-tab" data-toggle="tab" href="#sign-up" role="tab"-->
+                <!--                           aria-controls="sign-up" aria-selected="false">-->
+                <!--                            <i class="fa fa-bar-chart" aria-hidden="true"></i> Register-->
+                <!--                        </a>-->
+                <!--                    </li>-->
+                <!--                </ul>-->
+
+                <div class="tab-content mt-4" id="myTabContent">
+
+                    <div class="tab-pane fade show active" id="sign-in" role="tabpanel" aria-labelledby="login-tab">
+
+                        <form action="{{route('login')}}" method="post">
+                            @csrf
+                            <div class="form-group">
+                                <label for="loginEmail">Email address</label>
+                                <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" name="email"
+                                       placeholder="Enter email">
+                                <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Password</label>
+                                <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Password">
+                            </div>
+                            <!--                            <div class="form-group">-->
+                            <!--                                <div class="form-check">-->
+                            <!--                                    <label class="form-check-label">-->
+                            <!--                                        <input type="checkbox" class="form-check-input">-->
+                            <!--                                        Remember me-->
+                            <!--                                    </label>-->
+                            <!--                                    <span class="forgot float-right"><a href="#!">Forgot password?</a></span>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Log in</button>
+                        </form>
+
+                    </div>
+
+                    <!--                    <div class="tab-pane fade" id="sign-up" role="tabpanel" aria-labelledby="register-tab">-->
+                    <!---->
+                    <!--                        <form action="index.html">-->
+                    <!--                            <div class="form-row">-->
+                    <!--                                <div class="form-group col-md-6">-->
+                    <!--                                    <label for="validationDefault01">First name</label>-->
+                    <!--                                    <input type="text" class="form-control" id="validationDefault01"-->
+                    <!--                                           placeholder="First name" required>-->
+                    <!--                                </div>-->
+                    <!--                                <div class="form-group col-md-6">-->
+                    <!--                                    <label for="validationDefault02">Last name</label>-->
+                    <!--                                    <input type="text" class="form-control" id="validationDefault02"-->
+                    <!--                                           placeholder="Last name" required>-->
+                    <!--                                </div>-->
+                    <!--                                <div class="form-group col-md-12">-->
+                    <!--                                    <input type="email" class="form-control" id="registerEmail1"-->
+                    <!--                                           aria-describedby="emailHelp" placeholder="Enter email">-->
+                    <!--                                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with-->
+                    <!--                                        anyone else.</small>-->
+                    <!--                                </div>-->
+                    <!--                                <div class="form-group col-md-12">-->
+                    <!--                                    <label>Password</label>-->
+                    <!--                                    <input type="password" class="form-control" id="inputPassword"-->
+                    <!--                                           placeholder="Password">-->
+                    <!--                                </div>-->
+                    <!--                                <div class="form-group col-md-12">-->
+                    <!--                                    <label>Repeat Password</label>-->
+                    <!--                                    <input type="password" class="form-control" id="repeatPassword"-->
+                    <!--                                           placeholder="Repeat Password">-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                            <div class="form-group">-->
+                    <!--                                <div class="form-check">-->
+                    <!--                                    <label class="form-check-label">-->
+                    <!--                                        <input type="checkbox" class="form-check-input">-->
+                    <!--                                        I agree the Terms and Conditions-->
+                    <!--                                    </label>-->
+                    <!--                                </div>-->
+                    <!--                            </div>-->
+                    <!--                            <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>-->
+                    <!--                        </form>-->
+                    <!---->
+                    <!--                    </div>-->
+
+                </div>
+
+
+            </div>
+
         </div>
+
+        <!-- /Login Form -->
+
+
     </div>
 </div>
-@endsection
+
+<!-- JS Common -->
+<script src="assets/vendor/popper/1.12.9/popper.min.js"></script>
+
+<!-- JS Custom -->
+<script src="assets/custom/1.0.0/js/bootstrap.min.js"></script>
+<script src="assets/custom/1.0.0/js/script.js"></script>
+</body>
+</html>
