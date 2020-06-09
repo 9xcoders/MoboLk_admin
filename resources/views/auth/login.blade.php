@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <!-- Title -->
-    <title>OpenAdmin - HTML5 client</title>
+    <title>Mobo ADMIN</title>
 
     <!-- Required Meta Tags -->
     <meta charset="utf-8">
@@ -73,14 +73,30 @@
                         <form action="{{route('login')}}" method="post">
                             @csrf
                             <div class="form-group">
-                                <label for="loginEmail">Email address</label>
-                                <input type="email" class="form-control" id="loginEmail" aria-describedby="emailHelp" name="email"
-                                       placeholder="Enter email">
+                                <label for="loginEmail">Email address *</label>
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                       name="email" value="{{ old('email') }}"
+                                       required
+                                       placeholder="Enter email"
+                                       autocomplete="email" autofocus>
+
+                                @error('email')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                                 <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
                             </div>
                             <div class="form-group">
-                                <label for="loginPassword">Password</label>
-                                <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Password">
+                                <label for="loginPassword">Password *</label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password"
+                                       required
+                                       placeholder="Password">
+                                @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <!--                            <div class="form-group">-->
                             <!--                                <div class="form-check">-->
