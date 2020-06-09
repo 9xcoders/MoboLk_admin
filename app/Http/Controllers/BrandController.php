@@ -7,7 +7,9 @@ use App\Repository\BrandRepository;
 use App\Repository\CategoryRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Image;
 
 class BrandController extends Controller
@@ -61,6 +63,27 @@ class BrandController extends Controller
     {
         $imageUrl = null;
         $brandSlug = Str::slug($request->name, '-');
+
+        $params = $request->except('_token');
+        $params['slug'] = $brandSlug;
+
+        $customAttributes = [
+            'name' => 'Name',
+            'slug' => 'Name',
+        ];
+
+        $validator = Validator::make($params, [
+            'name' => 'required|max:255',
+            'categories' => 'required',
+            'slug' => 'required|unique:brands,slug',
+            'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ], [], $customAttributes);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
         if ($request->file('image')) {
             $image = $request->file('image');
@@ -132,12 +155,32 @@ class BrandController extends Controller
 
     public function update(Request $request, $id)
     {
+        $params = $request->all();
         $brand = $this->brandRepository->find($id);
 
         if ($brand) {
 
             $imageUrl = null;
             $brandSlug = Str::slug($request->name, '-');
+
+            $params['slug'] = $brandSlug;
+            $customAttributes = [
+                'name' => 'Name',
+                'slug' => 'Name',
+            ];
+
+            $validator = Validator::make($params, [
+                'name' => 'required|max:255',
+                'categories' => 'required',
+                'slug' => ['required', Rule::unique('brands', 'slug')->ignore($id, 'id')],
+                'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ], [], $customAttributes);
+
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
 
             if ($request->file('image')) {
                 $image = $request->file('image');

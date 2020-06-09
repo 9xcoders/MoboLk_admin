@@ -17,16 +17,19 @@
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="form-group">
-                    <label for="name">Feature Name</label>
+                    <label for="name">Feature Name *</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder=""
                            value="{{isset($data['feature']) ? $data['feature']->name : null}}">
+                    @error('name')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
             <div class="col-12 col-md-6">
 
 
                 <div class="form-group">
-                    <label for="brand_id">Category</label>
+                    <label for="brand_id">Category *</label>
                     <select class="form-control" id="feature_category_id" name="feature_category_id">
                         <option value="">--Select a category--</option>
                         @foreach($data['categories'] as $category)
@@ -44,6 +47,9 @@
 
                         @endforeach
                     </select>
+                    @error('feature_category_id')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
         </div>
@@ -54,4 +60,8 @@
 </div>
 
 
+@endsection
+
+@section('js')
+@parent
 @endsection

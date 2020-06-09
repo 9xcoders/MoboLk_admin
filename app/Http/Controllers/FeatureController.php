@@ -6,7 +6,9 @@ use App\Repository\FeatureCategoryRepository;
 use App\Repository\FeatureRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class FeatureController extends Controller
 {
@@ -47,6 +49,27 @@ class FeatureController extends Controller
     {
         $featureSlug = Str::slug($request->name, '-');
 
+        $params = $request->except('_token');
+        $params['slug'] = $featureSlug;
+
+        $customAttributes = [
+            'name' => 'Name',
+            'slug' => 'Name',
+            'feature_category_id' => 'Category',
+        ];
+
+        $validator = Validator::make($params, [
+            'name' => 'required|max:255',
+            'feature_category_id' => 'required',
+            'slug' => 'required|unique:features,slug'
+        ], [], $customAttributes);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         $feature = [
             'name' => $request->name,
             'slug' => $featureSlug,
@@ -85,8 +108,30 @@ class FeatureController extends Controller
     public function update(Request $request, $id)
     {
         $feature = $this->featureRepository->find($id);
+        $params = $request->except('_token');
         $featureSlug = Str::slug($request->name, '-');
         if ($feature) {
+
+            $params['slug'] = $featureSlug;
+
+            $customAttributes = [
+                'name' => 'Name',
+                'slug' => 'Name',
+                'feature_category_id' => 'Category',
+            ];
+
+            $validator = Validator::make($params, [
+                'name' => 'required|max:255',
+                'feature_category_id' => 'required',
+                'slug' => ['required', Rule::unique('features', 'slug')->ignore($id, 'id')],
+            ], [], $customAttributes);
+
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
             $feature->name = $request->name;
             $feature->slug = $featureSlug;
             $feature->feature_category_id = $request->feature_category_id;

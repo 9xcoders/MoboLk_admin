@@ -150,7 +150,7 @@
                         </div>
 
 
-                        @error('product_images')
+                        @error('image')
                         <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>

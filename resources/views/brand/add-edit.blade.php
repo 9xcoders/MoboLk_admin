@@ -17,13 +17,17 @@
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="form-group">
-                    <label for="name">Brand Name</label>
+                    <label for="name">Brand Name *</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder=""
                            value="{{isset($data['brand']) ? $data['brand']->name : null}}">
+
+                    @error('name')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
             <div class="col-12 col-md-6">
-                <label for="">Brand Categories</label>
+                <label for="">Brand Categories *</label>
 
                 @if(isset($data['brand']))
                 @foreach($data['categories'] as $category)
@@ -60,7 +64,9 @@
                 @endforeach
                 @endif
 
-
+                @error('categories')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
         </div>
 
@@ -82,6 +88,9 @@
                         </div>
                     </div>
                 </div>
+                @error('image')
+                <div class="text-danger">{{ $message }}</div>
+                @enderror
             </div>
         </div>
 
