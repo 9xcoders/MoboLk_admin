@@ -116,7 +116,7 @@
                                             <option value="">--Select a brand--</option>
 
                                             @foreach($data['brands'] as $brand)
-                                            @if($data['product']->brand_id === $brand->id)
+                                            @if($data['product']->brand_id == $brand->id)
                                             <option value="{{$brand->id}}" selected>{{$brand->name}}</option>
                                             @else
                                             <option value="{{$brand->id}}">{{$brand->name}}</option>
