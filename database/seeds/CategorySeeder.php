@@ -16,27 +16,27 @@ class CategorySeeder extends Seeder
             [
                 'name' => 'Mobile Phones',
                 'slug' => 'mobile-phones',
-                'image_url' => env('BASE_PATH') . 'img/categories/mobile-phones.png'
+                'image_url' => 'http://demo.mobo.lk/img/categories/mobile-phones.png'
             ],
             [
                 'name' => 'Tablets',
                 'slug' => 'tablets',
-                'image_url' => env('BASE_PATH') . 'img/categories/tablets.png'
+                'image_url' => 'http://demo.mobo.lk/img/categories/tablets.png'
             ],
             [
                 'name' => 'Accessories',
                 'slug' => 'accessories',
-                'image_url' => env('BASE_PATH') . 'img/categories/accessories.png'
+                'image_url' => 'http://demo.mobo.lk/img/categories/accessories.png'
             ],
             [
                 'name' => 'Gadgets',
                 'slug' => 'gadgets',
-                'image_url' => env('BASE_PATH') . 'img/categories/gadgets.png'
+                'image_url' => 'http://demo.mobo.lk/img/categories/gadgets.png'
             ],
             [
                 'name' => 'Wearables',
                 'slug' => 'wearables',
-                'image_url' => env('BASE_PATH') . 'img/categories/wearables.png'
+                'image_url' => 'http://demo.mobo.lk/img/categories/wearables.png'
             ]
         ]);
     }
