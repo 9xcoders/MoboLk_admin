@@ -107,7 +107,12 @@ class BrandController extends Controller
             'image' => $imageUrl
         ];
 
+        $showHomeArray = array_intersect($request->categories, $request->show_home);
+
+//        dd($showHomeArray);
+
         $inserted = $this->brandRepository->create($brand);
+
 
         if ($inserted) {
 
@@ -116,7 +121,8 @@ class BrandController extends Controller
             foreach ($request->categories as $category) {
                 $brandCategories[] = [
                     'brand_id' => $inserted->id,
-                    'category_id' => $category
+                    'category_id' => $category,
+                    'show_home' => in_array($category, $showHomeArray) ? true : false
                 ];
             }
             $brandCategoryInserted = $this->brandCategoryRepository->insert($brandCategories);
@@ -138,12 +144,20 @@ class BrandController extends Controller
 
         foreach ($categories as $category) {
             $category->checked = false;
+            $category->showHome = false;
             foreach ($brand->brandCategories as $brandCategory) {
                 if ($brandCategory->category->id === $category->id) {
                     $category->checked = true;
+
+                    if ($brandCategory->show_home) {
+                        $category->showHome = true;
+                    }
+
                 }
             }
         }
+
+//        dd($categories);
 
         $data = [
             'title' => 'Edit Brand',
@@ -174,7 +188,7 @@ class BrandController extends Controller
                 'name' => 'required|max:255',
                 'categories' => 'required',
                 'slug' => ['required', Rule::unique('brands', 'slug')->ignore($id, 'id')],
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ], [], $customAttributes);
 
             if ($validator->fails()) {
@@ -207,26 +221,33 @@ class BrandController extends Controller
             $brandCategories = $brand->brandCategories;
             $categories = $request->categories;
 
+            $showHomeArray = array_intersect($request->categories, $request->show_home);
+
+
             $toDelete = [];
 
+//            foreach ($brandCategories as $brandCategory) {
+//                if (!in_array($brandCategory->category_id, $categories)) {
+//                    $toDelete[] = $brandCategory->id;
+//                }
+//            }
             foreach ($brandCategories as $brandCategory) {
-                if (!in_array($brandCategory->category_id, $categories)) {
-                    $toDelete[] = $brandCategory->id;
-                }
+                $this->brandCategoryRepository->delete($brandCategory->id);
             }
 
             foreach ($categories as $category) {
                 $brandCategory = [
                     'brand_id' => $brand->id,
-                    'category_id' => $category
+                    'category_id' => $category,
+                    'show_home' => in_array($category, $showHomeArray) ? true : false
                 ];
 
-                $this->brandCategoryRepository->updateOrCreate($brandCategory);
+                $this->brandCategoryRepository->create($brandCategory);
             }
 
-            if (count($toDelete) > 0) {
-                $this->brandCategoryRepository->delete($toDelete);
-            }
+//            if (count($toDelete) > 0) {
+//                $this->brandCategoryRepository->delete($toDelete);
+//            }
 
             return redirect()->route('brand.index');
         } else {

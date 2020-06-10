@@ -35,19 +35,19 @@
             <ul id="sidebarNav" class="nav nav-dark flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('product.index')}}">
-                        <i class="fa fa-pie-chart" aria-hidden="true"></i>
+                        <i class="fa fa-product-hunt"" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Products</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('top-selling.index')}}">
-                        <i class="fa fa-table" aria-hidden="true"></i>
+                        <i class="fa fa-line-chart" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Top Selling</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('brand.index')}}">
-                        <i class="fa fa-list" aria-hidden="true"></i>
+                        <i class="fa fa-font-awesome" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Brands</span>
                         <!--                        <span class="badge badge-success text-uppercase float-right d-none d-lg-block">New</span>-->
                     </a>
@@ -55,7 +55,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('feature.index')}}">
-                        <i class="fa fa-table" aria-hidden="true"></i>
+                        <i class="fa fa-list" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Features</span>
                     </a>
                 </li>
@@ -67,19 +67,19 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('banner-image.index')}}">
-                        <i class="fa fa-table" aria-hidden="true"></i>
+                        <i class="fa fa-picture-o" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Banner Images</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('hot-deal.index')}}">
-                        <i class="fa fa-table" aria-hidden="true"></i>
+                        <i class="fa fa-file-image-o" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Hot Deals</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('shop-settings.index')}}">
-                        <i class="fa fa-table" aria-hidden="true"></i>
+                        <i class="fa fa-cog" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Shop Settings</span>
                     </a>
                 </li>

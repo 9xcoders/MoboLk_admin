@@ -10,7 +10,7 @@ class BrandCategory extends Model
     protected $table = 'brand_categories';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['brand_id', 'category_id'];
+    protected $fillable = ['brand_id', 'category_id', 'show_home'];
 
     public function category()
     {

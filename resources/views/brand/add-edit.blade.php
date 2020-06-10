@@ -10,7 +10,7 @@
           autocomplete="off">
         @csrf
         @if(isset($data['brand']))
-            @method('PUT')
+        @method('PUT')
         @endif
         <input type="hidden" class="form-control" id="id" name="id"
                value="{{isset($data['brand']) ? $data['brand']->id : null}}">
@@ -27,39 +27,97 @@
                 </div>
             </div>
             <div class="col-12 col-md-6">
-                <label for="">Brand Categories *</label>
+                <p for="">Brand Categories *</p>
 
                 @if(isset($data['brand']))
                 @foreach($data['categories'] as $category)
 
                 @if($category->checked)
 
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input brand-categories" type="checkbox" checked
-                               value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
-                        {{$category->name}}
-                    </label>
+                <div class="form-check-inline">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-categories" type="checkbox" checked
+                                   value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
+                            {{$category->name}}
+                        </label>
+                    </div>
+
+                    @if($category->showHome)
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-category-home" type="checkbox"checked
+                                   value="{{$category->id}}" name="show_home[]" id="home_{{$category->id}}">
+                            DISPLAY IN HOME
+                        </label>
+                    </div>
+                    @else
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-category-home" type="checkbox"
+                                   value="{{$category->id}}" name="show_home[]" id="home_{{$category->id}}">
+                            DISPLAY IN HOME
+                        </label>
+                    </div>
+                    @endif
                 </div>
                 @else
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input brand-categories" type="checkbox"
-                               value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
-                        {{$category->name}}
-                    </label>
+                <div class=" form-check-inline">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-categories" type="checkbox"
+                                   value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
+                            {{$category->name}}
+                        </label>
+                    </div>
+                    @if($category->showHome)
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-category-home" type="checkbox"checked
+                                   value="{{$category->id}}" name="show_home[]" id="home_{{$category->id}}">
+                            DISPLAY IN HOME
+                        </label>
+                    </div>
+                    @else
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-category-home" type="checkbox"
+                                   value="{{$category->id}}" name="show_home[]" id="home_{{$category->id}}">
+                            DISPLAY IN HOME
+                        </label>
+                    </div>
+                    @endif
                 </div>
                 @endif
 
                 @endforeach
                 @else
                 @foreach($data['categories'] as $category)
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input brand-categories" type="checkbox"
-                               value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
-                        {{$category->name}}
-                    </label>
+                <div class=" form-check-inline">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-categories" type="checkbox"
+                                   value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
+                            {{$category->name}}
+                        </label>
+                    </div>
+                    @if($category->showHome)
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-category-home" type="checkbox"checked
+                                   value="{{$category->id}}" name="show_home[]" id="home_{{$category->id}}">
+                            DISPLAY IN HOME
+                        </label>
+                    </div>
+                    @else
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input brand-category-home" type="checkbox"
+                                   value="{{$category->id}}" name="show_home[]" id="home_{{$category->id}}">
+                            DISPLAY IN HOME
+                        </label>
+                    </div>
+                    @endif
                 </div>
                 @endforeach
                 @endif

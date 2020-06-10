@@ -35,7 +35,7 @@ class ShopSettingsController extends Controller
         $validator = Validator::make($params, [
             'shop_name' => 'required|max:255',
             'address_line_1' => 'required|max:255',
-            'shop_logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'shop_logo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         if ($validator->fails()) {
