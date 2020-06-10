@@ -100,6 +100,7 @@ class BrandController extends Controller
 
             $imageUrl = url($directory . $filename);
         }
+        $showHomes = $request->show_home ? $request->show_home : [];
 
         $brand = [
             'name' => $request->name,
@@ -107,7 +108,7 @@ class BrandController extends Controller
             'image' => $imageUrl
         ];
 
-        $showHomeArray = array_intersect($request->categories, $request->show_home);
+        $showHomeArray = array_intersect($request->categories, $showHomes);
 
 //        dd($showHomeArray);
 
@@ -221,7 +222,9 @@ class BrandController extends Controller
             $brandCategories = $brand->brandCategories;
             $categories = $request->categories;
 
-            $showHomeArray = array_intersect($request->categories, $request->show_home);
+            $showHomes = $request->show_home ? $request->show_home : [];
+
+            $showHomeArray = array_intersect($request->categories, $showHomes);
 
 
             $toDelete = [];
