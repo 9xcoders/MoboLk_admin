@@ -28,7 +28,7 @@
         <tr>
             <th scope="row">{{ $product->unique_id }}</th>
             <td>
-                <img class="image" src="{{ $product->default_image }}" height="100px" width="150px"
+                <img class="image" src="{{ $product->image_url }}" height="100px" width="150px"
                      alt="{{ $product->slug }}">
             </td>
             <td>{{ $product->name }}</td>

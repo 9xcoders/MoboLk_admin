@@ -59,6 +59,10 @@ class ProductController extends Controller
     {
 
         $products = $this->productRepository->productsWithCategories();
+
+        foreach ($products as $key => $product) {
+            $product->image_url = $product->productImages ? $product->productImages->first() ? $product->productImages->first()->image_url : '' : '';
+        }
         $data = [
             'title' => 'Products',
             'products' => $products
