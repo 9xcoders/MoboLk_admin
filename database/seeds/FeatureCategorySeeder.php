@@ -16,17 +16,22 @@ class FeatureCategorySeeder extends Seeder
             [
                 'name' => 'Ram',
                 'slug' => 'ram',
-                'add_multi' => false
+                'is_filter' => true
             ],
             [
                 'name' => 'Storage',
                 'slug' => 'storage',
-                'add_multi' => false
+                'is_filter' => true
             ],
             [
                 'name' => 'Color',
                 'slug' => 'color',
-                'add_multi' => true
+                'is_filter' => true
+            ],
+            [
+                'name' => 'Warranty',
+                'slug' => 'warranty',
+                'is_filter' => false
             ]
         ]);
     }

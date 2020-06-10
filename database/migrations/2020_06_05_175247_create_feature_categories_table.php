@@ -17,7 +17,7 @@ class CreateFeatureCategoriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->boolean('add_multi')->default(false);
+            $table->boolean('is_filter')->default(false);
             $table->timestamps();
         });
     }

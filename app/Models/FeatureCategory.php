@@ -9,6 +9,7 @@ class FeatureCategory extends Model
 {
     protected $table = 'feature_categories';
     protected $primaryKey = 'id';
+    protected $fillable = ['name', 'slug', 'is_filter'];
 
     public function features()
     {

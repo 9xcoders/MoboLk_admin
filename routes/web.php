@@ -62,6 +62,15 @@ Route::group(['prefix' => 'feature'], function () {
     Route::delete('delete/{id}', 'FeatureController@delete')->name('feature.delete');
 });
 
+Route::group(['prefix' => 'feature-category'], function () {
+    Route::get('/', 'FeatureCategoryController@index')->name('feature-category.index');
+    Route::get('create', 'FeatureCategoryController@create')->name('feature-category.create');
+    Route::post('store', 'FeatureCategoryController@store')->name('feature-category.store');
+    Route::get('edit/{id}', 'FeatureCategoryController@edit')->name('feature-category.edit');
+    Route::put('update/{id}', 'FeatureCategoryController@update')->name('feature-category.update');
+    Route::delete('delete/{id}', 'FeatureCategoryController@delete')->name('feature-category.delete');
+});
+
 
 Route::group(['prefix' => 'shop-settings'], function () {
     Route::get('/', 'ShopSettingsController@index')->name('shop-settings.index');

@@ -43,13 +43,20 @@
                     <a class="nav-link" href="{{route('brand.index')}}">
                         <i class="fa fa-list" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Brands</span>
-<!--                        <span class="badge badge-success text-uppercase float-right d-none d-lg-block">New</span>-->
+                        <!--                        <span class="badge badge-success text-uppercase float-right d-none d-lg-block">New</span>-->
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('feature.index')}}">
                         <i class="fa fa-table" aria-hidden="true"></i>
                         <span class="d-none d-lg-inline">Features</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{route('feature-category.index')}}">
+                        <i class="fa fa-table" aria-hidden="true"></i>
+                        <span class="d-none d-lg-inline">Feature Categories</span>
                     </a>
                 </li>
                 <li class="nav-item">
