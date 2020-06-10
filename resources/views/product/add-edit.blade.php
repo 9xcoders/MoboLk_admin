@@ -87,7 +87,7 @@
                                             @foreach($data['categories'] as $category)
 
                                             @if(isset($data['product']))
-                                            @if($data['product']->category_id === $category->id)
+                                            @if($data['product']->category_id == $category->id)
                                             <option value="{{$category->id}}" selected>{{$category->name}}</option>
                                             @else
                                             <option value="{{$category->id}}">{{$category->name}}</option>
