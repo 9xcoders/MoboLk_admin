@@ -7,6 +7,7 @@ namespace App\Repository;
 interface ProductRepository extends BaseRepository
 {
     public function productsWithCategoriesOffset($offset);
+
     public function productsWithCategories();
 
     public function productsWithCategoriesAndFiltersOffset($offset, $filters);
@@ -22,4 +23,6 @@ interface ProductRepository extends BaseRepository
     public function productsByBrandCategory($category, $categoryId);
 
     public function delete($productId);
+
+    public function searchProduct($searchKey);
 }

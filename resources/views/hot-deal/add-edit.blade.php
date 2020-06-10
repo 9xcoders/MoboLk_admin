@@ -6,67 +6,79 @@
 <div class="widget-content py-3">
     <form id="needs-validation" enctype="multipart/form-data"
           novalidate method="post"
-          action="{{isset($data['brand']) ? route('brand.update', $data['brand']->id) : route('brand.store')}}"
+          action="{{isset($data['hotDeal']) ? route('hot-deal.update', $data['hotDeal']->id) : route('hot-deal.store')}}"
           autocomplete="off">
         @csrf
-        @if(isset($data['brand']))
+        @if(isset($data['hotDeal']))
             @method('PUT')
         @endif
         <input type="hidden" class="form-control" id="id" name="id"
-               value="{{isset($data['brand']) ? $data['brand']->id : null}}">
+               value="{{isset($data['hotDeal']) ? $data['hotDeal']->id : null}}">
         <div class="row">
             <div class="col-12 col-md-6">
                 <div class="form-group">
-                    <label for="name">Brand Name *</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder=""
-                           value="{{isset($data['brand']) ? $data['brand']->name : null}}">
+                    <label for="name">Title *</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder=""
+                           value="{{isset($data['hotDeal']) ? $data['hotDeal']->title : null}}">
 
-                    @error('name')
+                    @error('title')
                     <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
-            <div class="col-12 col-md-6">
-                <label for="">Brand Categories *</label>
 
-                @if(isset($data['brand']))
-                @foreach($data['categories'] as $category)
+            <div class="col-12 col-md-3">
+                <div class="form-group">
+                    <label for="brand_id">Category *</label>
+                    <select required class="form-control" id="category_id" name="category_id">
+                        <option value="">--Select a category--</option>
+                        @foreach($data['categories'] as $category)
 
-                @if($category->checked)
+                        @if(isset($data['hotDeal']))
+                        @if($data['hotDeal']->category_id === $category->id)
+                        <option value="{{$category->id}}" selected>{{$category->name}}</option>
+                        @else
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endif
 
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input brand-categories" type="checkbox" checked
-                               value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
-                        {{$category->name}}
-                    </label>
+                        @else
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endif
+
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
-                @else
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input brand-categories" type="checkbox"
-                               value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
-                        {{$category->name}}
-                    </label>
-                </div>
-                @endif
 
-                @endforeach
-                @else
-                @foreach($data['categories'] as $category)
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input brand-categories" type="checkbox"
-                               value="{{$category->id}}" name="categories[]" id="{{$category->id}}">
-                        {{$category->name}}
-                    </label>
-                </div>
-                @endforeach
-                @endif
 
-                @error('categories')
-                <div class="text-danger">{{ $message }}</div>
-                @enderror
+            </div>
+
+            <div class="col-12 col-md-3">
+                <div class="form-group">
+                    <label for="name">Button Text *</label>
+                    <input type="text" class="form-control" id="button_text" name="button_text" placeholder=""
+                           value="{{isset($data['hotDeal']) ? $data['hotDeal']->button_text : null}}">
+
+                    @error('button_text')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="short_desc">Description *</label>
+                    <textarea class="form-control" id="description" name="description" rows="4">
+                        {{isset($data['hotDeal']) ? $data['hotDeal']->description : null}}
+                    </textarea>
+                    @error('description')
+                    <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
         </div>
 
@@ -95,10 +107,10 @@
 
             <div class="col-6 mt-4">
 
-                @if(isset($data['brand']))
+                @if(isset($data['hotDeal']))
                 <p for="name">Existing Image</p>
-                @if($data['brand']->image)
-                <img src="{{$data['brand']->image}}" height="200px" width="300px"/>
+                @if($data['hotDeal']->image_url)
+                <img src="{{$data['hotDeal']->image_url}}"  height="200px" width="300px"/>
                 @else
                 <label class="text-danger">No image available</label>
                 @endif

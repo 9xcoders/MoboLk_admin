@@ -97,4 +97,12 @@ class ProductRepositoryImpl extends BaseRepositoryImpl implements ProductReposit
     {
         return Product::destroy($productId);
     }
+
+    public function searchProduct($searchKey)
+    {
+        return Product::with('category')->where(function ($query) use ($searchKey) {
+            $query->where('name', 'LIKE', '%' . $searchKey . '%')
+                ->orWhere('slug', 'LIKE', '%' . $searchKey . '%')->orWhere('keywords', 'LIKE', '%' . $searchKey . '%');
+        })->get();
+    }
 }

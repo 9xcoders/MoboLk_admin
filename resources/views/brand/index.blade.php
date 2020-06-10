@@ -9,6 +9,7 @@
         <i class="fa fa-plus-circle"></i>&nbsp;Add Brand
     </a>
 
+    @if(count($data['brands']) > 0)
     <table class="table">
         <thead>
         <tr>
@@ -49,6 +50,11 @@
         @endforeach
         </tbody>
     </table>
+    @else
+    <h4 class="alert-danger">No brands available</h4>
+    @endif
+
+
 </div>
 
 

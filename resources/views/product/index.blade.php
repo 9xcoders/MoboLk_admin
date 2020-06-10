@@ -57,7 +57,7 @@
     </table>
 
     @else
-    <h5 class="text-danger">No products available</h5>
+    <h4 class="alert-danger">No products available</h4>
     @endif
 </div>
 

@@ -15,14 +15,12 @@
 
     <!-- Main CSS with Bootstrap -->
     <link rel="stylesheet" href="{{ asset('assets/custom/1.0.0/css/style.min.css') }}">
-    <!-- Style just for doc. Remove it for your project. -->
-    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/assets/css/docs.min.css') }}">
 
     <!-- CSS Vendor -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/4.7.0/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/toastr/2.1.3/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/vendor/highlight/9.12.0/styles/default.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.css') }}"/>
 
     <link rel="stylesheet" href="{{ asset('css/jquery.fileupload.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/jquery.fileupload-ui.css') }}"/>
@@ -95,7 +93,8 @@
 
                                 <i class="fa fa-sign-out" aria-hidden="true"></i> {{ __('Logout') }}
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                      style="display: none;">
                                     @csrf
                                 </form>
                             </a>
@@ -418,72 +417,20 @@
     </div>
 </div>
 
-<!-- JS Common -->
-<script src="assets/vendor/popper/1.12.9/popper.min.js"></script>
-<script src="assets/vendor/toastr/2.1.3/toastr.min.js"></script>
-<script src="assets/vendor/highlight/9.12.0/highlight.pack.js"></script>
-<script>
-    function readURL(input) {
-        var Thisinput = $(input)
-        if (input.files && input.files[0]) {
-
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                Thisinput.closest('.file-upload').find('.image-upload-wrap').hide();
-
-                Thisinput.closest('.file-upload').find('.file-upload-image').attr('src', e.target.result);
-                Thisinput.closest('.file-upload').find('.file-upload-content').show();
-
-                Thisinput.closest('.file-upload').find('.image-title').html(input.files[0].name);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-
-        } else {
-            removeUpload();
-        }
-    }
-
-    function removeUpload() {
-        $('.file-upload-input').replaceWith($('.file-upload-input').clone());
-        $('.file-upload-content').hide();
-        $('.image-upload-wrap').show();
-    }
-
-    $('.image-upload-wrap').bind('dragover', function () {
-        $('.image-upload-wrap').addClass('image-dropping');
-    });
-    $('.image-upload-wrap').bind('dragleave', function () {
-        $('.image-upload-wrap').removeClass('image-dropping');
-    });
-
-</script>
-
-<!-- JS Page -->
-<script src="assets/vendor/chartjs/2.7.0/chart.min.js"></script>
-
-<!-- JS Custom -->
-<script src="assets/custom/1.0.0/js/bootstrap.min.js"></script>
-<script src="assets/custom/1.0.0/js/script.js"></script>
-<script src="assets/custom/1.0.0/js/source-code.js"></script>
 </body>
 
 
 @section('js')
 <!-- jQuery Plugins -->
 <script src="{{ asset('assets/vendor/jquery/3.2.1/jquery-3.2.1.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/popper/1.12.9/popper.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/toastr/2.1.3/toastr.min.js') }}"></script>
 <script src="{{ asset('assets/vendor/highlight/9.12.0/highlight.pack.js') }}"></script>
 
-<!-- JS Page -->
-<script src="{{ asset('assets/vendor/chartjs/2.7.0/chart.min.js') }}"></script>
-
 <!-- JS Custom -->
 <script src="{{ asset('assets/custom/1.0.0/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/custom/1.0.0/js/script.js') }}"></script>
-<script src="{{ asset('assets/custom/1.0.0/js/source-code.js') }}"></script>
 
 @show
 

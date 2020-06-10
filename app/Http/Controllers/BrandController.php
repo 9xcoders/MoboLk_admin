@@ -77,7 +77,7 @@ class BrandController extends Controller
             'name' => 'required|max:255',
             'categories' => 'required',
             'slug' => 'required|unique:brands,slug',
-            'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], [], $customAttributes);
 
         if ($validator->fails()) {
@@ -95,7 +95,7 @@ class BrandController extends Controller
             if (!File::exists($path)) File::makeDirectory($path, 0755);
 
             $imageSave = Image::make($image);
-            $imageSave->fit(250, 150);
+            $imageSave->fit(600, 600);
             $imageSave->save($path . '/' . $filename);
 
             $imageUrl = url($directory . $filename);
@@ -174,7 +174,7 @@ class BrandController extends Controller
                 'name' => 'required|max:255',
                 'categories' => 'required',
                 'slug' => ['required', Rule::unique('brands', 'slug')->ignore($id, 'id')],
-                'image.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ], [], $customAttributes);
 
             if ($validator->fails()) {

@@ -51,6 +51,8 @@ Route::group(['prefix' => 'product'], function () {
 
 
     });
+    Route::get('search', 'ProductController@search')->name('product.search');
+
 });
 
 Route::group(['prefix' => 'feature'], function () {
@@ -77,4 +79,25 @@ Route::group(['prefix' => 'shop-settings'], function () {
     Route::post('store', 'ShopSettingsController@store')->name('shop-settings.store');
 });
 
+Route::group(['prefix' => 'top-selling'], function () {
+    Route::get('/', 'TopSellingController@index')->name('top-selling.index');
+    Route::get('create', 'TopSellingController@create')->name('top-selling.create');
+    Route::post('store', 'TopSellingController@store')->name('top-selling.store');
+    Route::delete('delete/{id}', 'TopSellingController@delete')->name('top-selling.delete');
+});
 
+Route::group(['prefix' => 'banner-image'], function () {
+    Route::get('/', 'BannerImageController@index')->name('banner-image.index');
+    Route::get('create', 'BannerImageController@create')->name('banner-image.create');
+    Route::post('store', 'BannerImageController@store')->name('banner-image.store');
+    Route::delete('delete/{id}', 'BannerImageController@delete')->name('banner-image.delete');
+});
+
+Route::group(['prefix' => 'hot-deal'], function () {
+    Route::get('/', 'HotDealController@index')->name('hot-deal.index');
+    Route::get('create', 'HotDealController@create')->name('hot-deal.create');
+    Route::post('store', 'HotDealController@store')->name('hot-deal.store');
+    Route::get('edit/{id}', 'HotDealController@edit')->name('hot-deal.edit');
+    Route::put('update/{id}', 'HotDealController@update')->name('hot-deal.update');
+    Route::delete('delete/{id}', 'HotDealController@delete')->name('hot-deal.delete');
+});

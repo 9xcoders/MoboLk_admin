@@ -50,7 +50,7 @@
         </tbody>
     </table>
     @else
-    <h4 class="alert-danger">No Features Available</h4>
+    <h4 class="alert-danger">No feature categories available</h4>
 
     @endif
 
