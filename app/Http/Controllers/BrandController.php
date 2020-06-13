@@ -95,7 +95,7 @@ class BrandController extends Controller
             if (!File::exists($path)) File::makeDirectory($path, 0755);
 
             $imageSave = Image::make($image);
-            $imageSave->fit(600, 600);
+            $imageSave->resize(600, 600);
             $imageSave->save($path . '/' . $filename);
 
             $imageUrl = url($directory . $filename);
@@ -207,7 +207,7 @@ class BrandController extends Controller
                 if (!File::exists($path)) File::makeDirectory($path, 0755);
 
                 $imageSave = Image::make($image);
-                $imageSave->fit(250, 150);
+                $imageSave->resize(600, 600);
                 $imageSave->save($path . '/' . $filename);
 
                 $imageUrl = url($directory . $filename);
