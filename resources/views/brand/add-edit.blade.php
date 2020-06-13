@@ -156,7 +156,7 @@
                 @if(isset($data['brand']))
                 <p for="name">Existing Image</p>
                 @if($data['brand']->image)
-                <img src="{{$data['brand']->image}}" height="200px" width="300px"/>
+                <img src="{{$data['brand']->image}}"/>
                 @else
                 <label class="text-danger">No image available</label>
                 @endif
