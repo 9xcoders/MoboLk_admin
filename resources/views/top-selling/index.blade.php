@@ -13,8 +13,10 @@
         @csrf
         <div class="row">
             <div class="col-12 col-md-6">
+                <input type="hidden" id="is_version" name="is_version"/>
+                <input type="hidden" id="product_id" name="product_id"/>
+
                 <div class="form-group">
-                    <input type="hidden" id="product_id" name="product_id"/>
                     <label for="name">Product Name *</label>
                     <input type="text" class="form-control" id="autocomplete" placeholder="Search product..">
                     @error('product_id')
@@ -45,7 +47,12 @@
 
         <tr>
             <th scope="row">{{ $topSelling->id }}</th>
+            @if($topSelling->is_version)
+            <td>{{ $topSelling->product->name }} {{$topSelling->product->featureNames}}</td>
+            @else
             <td>{{ $topSelling->product->name }}</td>
+            @endif
+
             <td>{{ $topSelling->category->name}}</td>
             <td class="d-inline-flex">
 

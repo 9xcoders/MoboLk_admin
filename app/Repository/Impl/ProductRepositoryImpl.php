@@ -100,9 +100,60 @@ class ProductRepositoryImpl extends BaseRepositoryImpl implements ProductReposit
 
     public function searchProduct($searchKey)
     {
-        return Product::with('category')->where(function ($query) use ($searchKey) {
+        $products = Product::with('category')->where(function ($query) use ($searchKey) {
             $query->where('name', 'LIKE', '%' . $searchKey . '%')
                 ->orWhere('slug', 'LIKE', '%' . $searchKey . '%')->orWhere('keywords', 'LIKE', '%' . $searchKey . '%');
         })->get();
+
+        foreach ($products as $key => $product) {
+            $versions = $product->productVersions;
+            if ($versions->count() > 0) {
+
+                foreach ($versions as $version) {
+                    $verProduct = new Product([
+                        "unique_id" => $version->unique_id,
+                        "name" => $product->name,
+                        "slug" => $version->slug,
+                        "short_desc" => $product->short_desc,
+                        "long_desc" => $product->long_desc,
+                        "price" => $version->price,
+                        "off_price" => $version->off_price,
+                        "in_stock" => $version->in_stock,
+                        "category_id" => $product->category_id,
+                        "brand_id" => $product->brand_id,
+                        "default_image" => $product->default_image,
+                        "keywords" => $product->keywords
+                    ]);
+
+                    $featureNames = '';
+                    foreach ($version->productFeatures as $feature) {
+                        if ($feature->feature->featureCategory->is_filter) {
+                            $featureNames .= $feature->feature->name . ' | ';
+                        }
+                    }
+                    $featureNames = rtrim($featureNames, ' | ');
+                    $verProduct->category = $product->category;
+                    $verProduct->id = $version->id;
+                    $verProduct->featureNames = $featureNames;
+                    $verProduct->is_version = true;
+                    $products->add($verProduct);
+                }
+                $products->forget($key);
+            } else {
+                $product->is_version = false;
+                $featureNames = '';
+                foreach ($product->productFeatures as $feature) {
+                    if ($feature->feature->featureCategory->is_filter) {
+                        $featureNames .= $feature->feature->name . ' | ';
+                    }
+                }
+                $featureNames = rtrim($featureNames, ' | ');
+
+                $product->featureNames = $featureNames;
+            }
+        }
+
+        return $products;
+
     }
 }

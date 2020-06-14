@@ -8,11 +8,16 @@ class TopSelling extends Model
 {
     protected $table = 'top_sellings';
     protected $primaryKey = 'id';
-    protected $fillable = ['product_id', 'category_id'];
+    protected $fillable = ['product_id', 'category_id', 'is_version'];
 
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function version()
+    {
+        return $this->belongsTo(ProductVersion::class, 'product_id');
     }
 
     public function category()

@@ -3,22 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Repository\ProductRepository;
+use App\Repository\ProductVersionRepository;
 use App\Repository\TopSellingRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use function GuzzleHttp\Promise\all;
+use Illuminate\Validation\Rule;
 
 class TopSellingController extends Controller
 {
     private $topSellingRepository;
     private $productRepository;
+    private $versionRepository;
 
     public function __construct(TopSellingRepository $topSellingRepository,
-                                ProductRepository $productRepository)
+                                ProductRepository $productRepository, ProductVersionRepository $versionRepository)
     {
         $this->topSellingRepository = $topSellingRepository;
         $this->productRepository = $productRepository;
+        $this->versionRepository = $versionRepository;
         $this->middleware('auth');
     }
 
@@ -42,7 +44,13 @@ class TopSellingController extends Controller
         ];
 
         $validator = Validator::make($params, [
-            'product_id' => 'required|unique:top_sellings,product_id'
+            'product_id' => [
+                'required',
+                Rule::unique('top_sellings')->where(function ($query) use ($request) {
+                    return $query->where('product_id', $request->product_id)
+                        ->where('is_version', $request->is_version);
+                }),
+            ]
         ], [
             'product_id.required' => 'Product name is required',
             'product_id.unique' => 'Product name already exists',
@@ -54,16 +62,25 @@ class TopSellingController extends Controller
                 ->withInput();
         }
 
-        $product = $this->productRepository->productWithEverythingById($request->product_id);
+//        dd($params);
+        $product = null;
+        if ($request->is_version) {
+            $product = $this->versionRepository->productVersionWithEverythingById($request->product_id);
+
+        } else {
+            $product = $this->productRepository->productWithEverythingById($request->product_id);
+        }
+
+
         if (!$product) {
             dd("Product not found");
         }
 
         $topSelling = [
             'product_id' => $product->id,
-            'category_id' => $product->category->id
+            'category_id' => $request->is_version ? $product->product->category->id : $product->category->id,
+            'is_version' => $request->is_version ? 1 : 0
         ];
-//        dd($topSelling);
 
         $inserted = $this->topSellingRepository->create($topSelling);
 

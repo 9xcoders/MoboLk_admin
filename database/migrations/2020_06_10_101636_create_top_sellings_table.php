@@ -17,6 +17,7 @@ class CreateTopSellingsTable extends Migration
             $table->id();
             $table->integer('product_id');
             $table->integer('category_id');
+            $table->boolean('is_version');
             $table->timestamps();
         });
     }

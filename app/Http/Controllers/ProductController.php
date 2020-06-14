@@ -545,7 +545,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
-        $products = $this->productRepository->searchProduct('ga');
+        $products = $this->productRepository->searchProduct($request->term);
         return response(json_encode($products));
     }
 
