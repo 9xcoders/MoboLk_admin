@@ -496,7 +496,7 @@ class ProductController extends Controller
 
         $validator = Validator::make($params, [
             'name' => 'required|max:255',
-            'slug' => ['required', Rule::unique('product_versions', 'slug')->ignore($id, 'id')],
+            'slug' => ['required', Rule::unique('product_versions', 'slug')->ignore($versionId, 'id')],
             'price' => 'required',
             'product_images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ], [], $customAttributes);
