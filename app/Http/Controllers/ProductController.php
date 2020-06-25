@@ -281,7 +281,8 @@ class ProductController extends Controller
 
         if (count($product->productVersions) > 0) {
             foreach ($product->productVersions as $version){
-                $version->topSelling->delete();
+                if($version->topSelling)
+                    $version->topSelling->delete();
             }
         }
 
