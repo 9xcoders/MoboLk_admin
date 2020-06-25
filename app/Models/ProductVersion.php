@@ -26,4 +26,9 @@ class ProductVersion extends Model
     {
         return $this->hasMany(ProductImages::class, 'product_id')->where('is_version', true);
     }
+
+    public function topSelling()
+    {
+        return $this->hasOne(TopSelling::class, 'product_id')->where('is_version', true);
+    }
 }

@@ -31,6 +31,7 @@ class ProductController extends Controller
     private $featureCategoryRepository;
     private $productVersionRepository;
     private $productFeatureRepository;
+    private $topSellingRepository;
     private $phonoKey = '07098efc8fc0637d5221f2c41b665331f1779a55ac7b6cf6';
     private $fonoapi;
 
@@ -273,6 +274,17 @@ class ProductController extends Controller
         if (!$product) {
             dd("Not found");
         }
+
+        if ($product->topSelling) {
+            $product->topSelling->delete();
+        }
+
+        if (count($product->productVersions) > 0) {
+            foreach ($product->productVersions as $version){
+                $version->topSelling->delete();
+            }
+        }
+
         $this->productRepository->delete($product->id);
         return redirect()->route('product.index');
 
@@ -537,6 +549,10 @@ class ProductController extends Controller
         $version = $this->productVersionRepository->find($versionId);
         if (!$version) {
             dd("Not found");
+        }
+
+        if ($version->topSelling) {
+            $version->topSelling->delete();
         }
         $this->productVersionRepository->delete($version->id);
         return redirect()->route('product.edit', ['id' => $id])->with('isVersion', true);

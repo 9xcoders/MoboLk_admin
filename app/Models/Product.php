@@ -42,4 +42,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductImages::class)->where('is_version', false);
     }
+
+    public function topSelling()
+    {
+        return $this->hasOne(TopSelling::class)->where('is_version', false);
+    }
 }
