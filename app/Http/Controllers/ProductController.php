@@ -283,9 +283,10 @@ class ProductController extends Controller
             foreach ($product->productVersions as $version){
                 if($version->topSelling)
                     $version->topSelling->delete();
+
+		$this->productVersionRepository->delete($version->id);
             }
 
-	    $product->productVersions->delete();
         }
 
         $this->productRepository->delete($product->id);
