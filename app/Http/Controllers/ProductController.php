@@ -284,6 +284,8 @@ class ProductController extends Controller
                 if($version->topSelling)
                     $version->topSelling->delete();
             }
+
+	    $product->productVersions->delete();
         }
 
         $this->productRepository->delete($product->id);
